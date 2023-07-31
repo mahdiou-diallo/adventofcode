@@ -1,3 +1,5 @@
+use itertools::FoldWhile::{Continue, Done};
+use itertools::Itertools;
 use std::fs;
 
 struct Solution;
@@ -24,51 +26,42 @@ impl Solution {
         })
     }
 
+    // fn day1_part2(text: &str) -> i32 {
+    //     let mut acc = State { idx: 0, floor: 0 };
+    //     for c in text.chars() {
+    //         acc.idx += 1;
+    //         match c {
+    //             '(' => {
+    //                 acc.floor += 1;
+    //             }
+    //             ')' => {
+    //                 acc.floor -= 1;
+    //                 if acc.floor == -1 {
+    //                     return acc.idx;
+    //                 }
+    //             }
+    //             _ => unreachable!(),
+    //         }
+    //     }
+    //     -1
+    // }
+
     fn day1_part2(text: &str) -> i32 {
-        let mut acc = State { idx: 0, floor: 0 };
-        for c in text.chars() {
-            acc.idx += 1;
-            match c {
-                '(' => {
-                    acc.floor += 1;
-                }
+        text.chars()
+            .enumerate()
+            .fold_while(0, |acc, (i, c)| match c {
+                '(' => Continue(acc + 1),
                 ')' => {
-                    acc.floor -= 1;
-                    if acc.floor == -1 {
-                        return acc.idx;
+                    if acc == 0 {
+                        Done(i as i32 + 1)
+                    } else {
+                        Continue(acc - 1)
                     }
                 }
                 _ => unreachable!(),
-            }
-        }
-        -1
+            })
+            .into_inner()
     }
-
-    // fn day1_part2(text: &str) -> i32 {
-    //     let r = text
-    //         .chars()
-    //         .scan(State { idx: 0, floor: 0 }, |acc, c| {
-    //             acc.idx += 1;
-    //             match c {
-    //                 '(' => {
-    //                     acc.floor += 1;
-    //                     Some(acc.idx)
-    //                 }
-    //                 ')' => {
-    //                     acc.floor -= 1;
-    //                     if acc.floor == -1 {
-    //                         None
-    //                     } else {
-    //                         Some(acc.idx)
-    //                     }
-    //                 }
-    //                 _ => unreachable!(),
-    //             }
-    //         })
-    //         .collect::<Vec<_>>();
-    //     println!("{:?}", r);
-    //     0
-    // }
 }
 
 #[cfg(test)]
