@@ -1,3 +1,5 @@
+use rust::solutions::*;
+
 fn main() {
-    println!("day 1 - {:?}", rust::day1());
+    println!("day 1 - {:?}", day01::solve());
 }
