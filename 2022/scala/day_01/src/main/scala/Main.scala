@@ -1,11 +1,11 @@
 @main def hello: Unit =
   // println(System.getProperty("user.dir"))
-  val source = io.Source.fromFile("../../data/day_01.txt")
+  val source = io.Source.fromFile("../../data/2022/01.txt")
   val lines =
     try source.mkString
     finally source.close()
 
-  val calories = lines.split("\n\n").map(getElfCalories(_)).toList
+  val calories = lines.split("(?:\r?\n){2}").map(getElfCalories(_)).toList
   val top3 = pickTopN(3, calories)
 
   println(s"max = ${top3.max}, sum top 3 = ${top3.sum}, top3 = $top3")
