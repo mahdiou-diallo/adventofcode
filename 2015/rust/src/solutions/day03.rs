@@ -49,21 +49,14 @@ fn part2(text: &str) -> i32 {
                     '<' => (-1, 0),
                     _ => unreachable!(),
                 };
-                // println!(
-                //     "pos1: {:?}, pos2: {:?}, char: {}, (dx,dy): ({},{})",
-                //     pos1, pos2, c, dx, dy
-                // );
+
                 let bot_1_moves = idx % 2 == 0;
                 let pos = if bot_1_moves { pos1 } else { pos2 };
 
                 let p = Pos(pos.0 + dx, pos.1 + dy);
-                // println!(
-                //     "idx: {}, bot_1_moves: {}, new_position: {:?}",
-                //     idx, bot_1_moves, p
-                // );
+
                 visited.entry(p).or_insert(true);
-                // println!("visited: {:?}", visited);
-                // println!("-------------------------------------");
+
                 if bot_1_moves {
                     (visited, p, pos2)
                 } else {
