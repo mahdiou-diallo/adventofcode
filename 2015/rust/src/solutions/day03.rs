@@ -10,10 +10,7 @@ pub fn solve() -> (i32, i32) {
 struct Pos(i32, i32);
 
 fn part1(text: &str) -> i32 {
-    text.lines()
-        .next()
-        .unwrap()
-        .chars()
+    text.chars()
         .fold(
             (HashMap::from([(Pos(0, 0), true)]), Pos(0, 0)),
             |(mut visited, pos), c| {
@@ -34,10 +31,7 @@ fn part1(text: &str) -> i32 {
 }
 
 fn part2(text: &str) -> i32 {
-    text.lines()
-        .next()
-        .unwrap()
-        .chars()
+    text.chars()
         .enumerate()
         .fold(
             (HashMap::from([(Pos(0, 0), true)]), Pos(0, 0), Pos(0, 0)),
