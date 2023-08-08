@@ -1,5 +1,7 @@
-use itertools::FoldWhile::{Continue, Done};
-use itertools::Itertools;
+use itertools::{
+    FoldWhile::{Continue, Done},
+    Itertools,
+};
 use std::fs;
 
 pub fn solve() -> (i32, i32) {
