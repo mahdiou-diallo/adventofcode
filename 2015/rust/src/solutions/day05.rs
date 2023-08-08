@@ -2,8 +2,10 @@ use itertools::{
     FoldWhile::{Continue, Done},
     Itertools,
 };
-use std::collections::{HashMap, HashSet};
-use std::fs;
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+};
 
 pub fn solve() -> (i32, i32) {
     let text = fs::read_to_string("../data/05.txt").unwrap();
@@ -25,6 +27,7 @@ fn part2(text: &str) -> i32 {
         .filter(|item| *item)
         .count() as i32
 }
+
 #[derive(Debug)]
 struct State {
     vowel_count: u32,
@@ -67,12 +70,8 @@ fn is_nice(text: &str, naughty_pairs: &HashSet<&str>) -> bool {
                 if !has_naughty_pair && i > 0 && naughty_pairs.contains(&text[i - 1..=i]) {
                     has_naughty_pair = true;
                 }
-                if !has_double_letter {
-                    if let Some(prev) = char_n_1 {
-                        if c == prev {
-                            has_double_letter = true
-                        }
-                    }
+                if !has_double_letter && char_n_1.is_some() && c == char_n_1.unwrap() {
+                    has_double_letter = true
                 }
 
                 let s = State {
@@ -83,9 +82,10 @@ fn is_nice(text: &str, naughty_pairs: &HashSet<&str>) -> bool {
                 };
 
                 if has_naughty_pair {
-                    return Done(s);
+                    Done(s)
+                } else {
+                    Continue(s)
                 }
-                Continue(s)
             },
         )
         .into_inner();
@@ -112,6 +112,7 @@ impl<'a> State2<'a> {
         }
     }
 }
+
 fn is_nice2(text: &str) -> bool {
     let state = text
         .chars()
@@ -126,43 +127,32 @@ fn is_nice2(text: &str) -> bool {
                  mut pairs,
              },
              (i, c)| {
-                if !has_3_symmetry {
-                    if let Some(c_n_2) = char_n_2 {
-                        if c == c_n_2 {
-                            has_3_symmetry = true
-                        }
-                    }
+                if !has_3_symmetry && char_n_2.is_some() && c == char_n_2.unwrap() {
+                    has_3_symmetry = true
                 }
-                if !has_repeat_pair {
-                    if i > 0 {
-                        let pair = &text[i - 1..=i];
-                        match pairs.get(pair) {
-                            Some(pair_idx) => {
-                                if *pair_idx < i - 1 {
-                                    has_repeat_pair = true
-                                }
+                if !has_repeat_pair && i > 0 {
+                    let pair = &text[i - 1..=i];
+                    match pairs.get(pair) {
+                        Some(pair_idx) => {
+                            if *pair_idx < i - 1 {
+                                has_repeat_pair = true
                             }
-                            None => _ = pairs.insert(pair, i),
                         }
+                        None => _ = pairs.insert(pair, i),
                     }
                 }
 
+                let state = State2 {
+                    char_n_2: char_n_1,
+                    char_n_1: Some(c),
+                    has_3_symmetry,
+                    has_repeat_pair,
+                    pairs,
+                };
                 if has_3_symmetry && has_repeat_pair {
-                    Done(State2 {
-                        char_n_2: char_n_1,
-                        char_n_1: Some(c),
-                        has_3_symmetry,
-                        has_repeat_pair,
-                        pairs,
-                    })
+                    Done(state)
                 } else {
-                    Continue(State2 {
-                        char_n_2: char_n_1,
-                        char_n_1: Some(c),
-                        has_3_symmetry,
-                        has_repeat_pair,
-                        pairs,
-                    })
+                    Continue(state)
                 }
             },
         )
