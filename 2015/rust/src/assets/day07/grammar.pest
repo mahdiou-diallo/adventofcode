@@ -1,0 +1,15 @@
+reference = { ASCII_ALPHA_LOWER+ }
+value = { ASCII_DIGIT+ }
+operand = { value | reference }
+
+straight = { operand ~ " " ~ "->" ~ " " ~ reference } 
+not = { "NOT" ~ " " ~ operand ~ " " ~ "->" ~ " " ~ reference } 
+lshift = { operand ~ " " ~ "LSHIFT" ~ " " ~ value ~ " " ~ "->" ~ " " ~ reference } 
+rshift = { operand ~ " " ~ "RSHIFT" ~ " " ~ value ~ " " ~ "->" ~ " " ~ reference } 
+and = { operand ~ " " ~ "AND" ~ " " ~ operand ~ " " ~ "->" ~ " " ~ reference } 
+or = { operand ~ " " ~ "OR" ~ " " ~ operand ~ " " ~ "->" ~ " " ~ reference } 
+
+types = _{ straight | not | lshift | rshift | and | or }
+command = _{ SOI ~ types ~ EOI }
+
+// WHITESPACE = _{ " " | "\t" }
