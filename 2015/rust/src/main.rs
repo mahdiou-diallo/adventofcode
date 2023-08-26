@@ -8,4 +8,5 @@ fn main() {
     println!("day 5 - {:?}", day05::solve());
     println!("day 6 - {:?}", day06::solve());
     println!("day 7 - {:?}", day07::solve());
+    println!("day 8 - {:?}", day08::solve());
 }
